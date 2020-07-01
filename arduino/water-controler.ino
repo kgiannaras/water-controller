@@ -25,7 +25,7 @@ int distance2;
 int tankfill1;
 int tankfill2;
 //water lever sensor analog input
-int level_input=14; // analog input
+int level_input=A14; // analog input
 //Relay
 int Relay1 =45 ;
 int Relay2 =46 ;
@@ -41,12 +41,12 @@ int led4 =28 ;
 int led5 =30 ;
 int led6 =32 ;
 //switch
-int switch1 =9;
-int switch2 =10;
-int switch3 =11;
-int switch4 =12;
-int switch5 =13;
-int switch6 =14;
+int switch1 =A9;
+int switch2 =A10;
+int switch3 =A11;
+int switch4 =A12;
+int switch5 =A13;
+int switch6 =A14;
 #include <LiquidCrystal.h>
 //LCD pin to Arduino
 const int pin_RS = 8; 
