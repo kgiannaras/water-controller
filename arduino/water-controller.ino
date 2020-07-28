@@ -45,7 +45,7 @@ int Relay1 =45 ;// hlektrobana k
 int Relay2 =46 ;// hlektrobana o
 int Relay3 =47 ;// potisma
 int Relay4 =48 ;// antlia k
-int Relay5 =49 ;// antlia potismatos
+int Relay5 =49 ;// keno
 int Relay6 =50 ;// antlia e
 int Relay7 =51;
 int Relay8 =52;
@@ -493,7 +493,7 @@ lcd.setCursor(0,0);
   lcd.clear();
     digitalWrite(Relay3,LOW);
  digitalWrite(led3,HIGH);
- digitalWrite(Relay5 , LOW);
+ //digitalWrite(Relay5 , LOW);
  lcd.print("Tank-O:");
 lcd.setCursor(7,0);
 lcd.print("   ");
@@ -511,7 +511,7 @@ if (digitalRead(Relay3) == LOW){
   if((soilMoisture >= 50) || (tankfill1 <= 30)){
     digitalWrite(Relay3,HIGH);
    digitalWrite(led3,LOW);
-    digitalWrite(Relay5 , LOW);
+    //digitalWrite(Relay5 ,HIGH);
   }
 }
 
@@ -591,24 +591,25 @@ if( analogRead(switch3) < 200) {
   digitalWrite(Relay3 , LOW);
   digitalWrite(led3 , HIGH); 
   delay(500);
-digitalWrite(Relay5 , LOW);
+//digitalWrite(Relay5 , LOW);
 
 if (digitalRead(Relay3) == LOW){
   if((soilMoisture >= 50) || (tankfill1 <= 30)){
     digitalWrite(Relay3,HIGH);
    digitalWrite(led3,LOW);
    delay(500);
-   digitalWrite(Relay5 , LOW);
+  // digitalWrite(Relay5 ,HIGH);
   }
 }
 c =1;
 }
 else{
+  
   if(c ==1){
      digitalWrite(Relay3,HIGH);
    digitalWrite(led3,LOW);
    delay(500);
-   digitalWrite(Relay5 , LOW);
+ //  digitalWrite(Relay5 , HIGH);
   c = 0;
   }
 }
