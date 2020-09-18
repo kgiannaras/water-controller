@@ -327,12 +327,12 @@ else{
   lcd.setCursor(0,1);
   lcd.print("                 ");
 //STEP MOTOR
-  myStepper.setSpeed(60);
+    myStepper.setSpeed(60);
   pinMode(endstop,INPUT);
   lcd.setCursor(9,0);
  lcd.print("Step Motor");
  stepperhome();
- steppermotor();
+ 
  lcd.clear();
  lcd.print("Process:");
  lcd.setCursor(9,0);
@@ -495,8 +495,8 @@ lcd.print("%");
 delay(delayDisplay);
  
  if((soilMoisture <= 30) && (tankfill1 >= 30)){//potisma
-  stepperhome();
-   if((soilMoisture <= 50) || (tankfill1 >= 30)){
+ 
+   if((soilMoisture <= 50) && (tankfill1 >= 30)){
     lcd.clear();
     digitalWrite(Relay3,LOW);
     digitalWrite(led3,HIGH);
@@ -510,8 +510,8 @@ delay(delayDisplay);
     lcd.print("%");
     lcd.setCursor(0,1);
     lcd.print("Watering Plant");
-   
-  while((soilMoisture <= 50) || (tankfill1 >= 30)){
+    stepperhome();
+  while((soilMoisture >= 50) || (tankfill1 <= 30)){
     hcsr1();
    steppermotor();
     
@@ -522,7 +522,7 @@ delay(delayDisplay);
  digitalWrite(Relay3,HIGH);
     digitalWrite(led3,LOW);
     digitalWrite(Relay5 ,HIGH);
-     
+    
   
 
 
@@ -536,33 +536,18 @@ if( analogRead(switch1) < 200) {
   lcd.setCursor(0,1);
   lcd.print("Fill Tank-C");
   delay(delayDisplay);
-  digitalWrite(Relay1 , LOW);
+  digitalWrite(Relay1 , LOW);// anoije hlektrobana, antlia
   digitalWrite(led1 , HIGH); 
   delay(500);
   digitalWrite(Relay4 , LOW);
  
-//klisimo fill clean
-//Serial.print("tankfill1=");
-//Serial.println(tankfill1);
-if (digitalRead(Relay1) == LOW){
-  if((tankfill1 >= 70) || (tankfill3 <= 30)){
-    
-    digitalWrite(Relay1,HIGH);
-    digitalWrite(led1,LOW);
-    delay(500);
-    digitalWrite(Relay4,HIGH);
-  }
+while(( analogRead(switch1) < 200)&&(tankfill1 <=80)&&(tankfill3>=30)) {
+
 }
-a =1;
-}
-else{
-  if(a ==1){
-     digitalWrite(Relay1,HIGH);
+  digitalWrite(Relay1,HIGH);
      digitalWrite(led1,LOW);
      delay(500);
      digitalWrite(Relay4,HIGH);
-     a = 0;
-  }
 }
 
 if( analogRead(switch2) < 200) {
@@ -603,11 +588,11 @@ if( analogRead(switch3) < 200) {
   digitalWrite(Relay5 , LOW);
   stepperhome();
 
-while(( analogRead(switch3) < 200)&&(soilMoisture >= 60)&&(tankfill1 <= 30)) {
+while(( analogRead(switch3) < 200)&&(soilMoisture<=50)&&(tankfill1>=30)) {
  hw103();
  hcsr1();
 steppermotor();
-
+analogRead(switch3);
 }
 digitalWrite(Relay3,HIGH);
      digitalWrite(led3,LOW);
