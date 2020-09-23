@@ -404,7 +404,11 @@ void loop() {
  
  if(phValue >= 6,9) {// check ph
   lcd.clear();
+<<<<<<< HEAD
   if((tankfill1 <= 70) && (tankfill3 >= 35)){
+=======
+  if((tankfill1 <= 70) && (tankfill3 >= 30)){
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
     digitalWrite(Relay1 , LOW);
   digitalWrite(led1 , HIGH);
   delay(500);
@@ -428,9 +432,20 @@ void loop() {
    lcd.print("Tank-E:");
   lcd.print(tankfill3);
    lcd.print("%");
+<<<<<<< HEAD
    delay(delayDisplay);
  }
    digitalWrite(Relay1 , HIGH);
+=======
+  
+  while((tankfill1 <= 70) && (tankfill3 >= 30)){
+  hcsr1;
+  hcsr3;
+  
+ }
+  }//end fill tankc
+  digitalWrite(Relay1 , HIGH);
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
   digitalWrite(led1 , LOW);
   delay(500);
   digitalWrite(Relay4 , HIGH);
@@ -460,7 +475,15 @@ if((tankfill2 <= 70) && (tankfill3 >= 35)){
   lcd.print("%");
   delay(delayDisplay);
    }//end fill tanko
+<<<<<<< HEAD
 
+=======
+ else{
+  digitalWrite(Relay2,HIGH);
+  digitalWrite(led2,LOW);
+  delay(500);
+ }
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
  }//end if ph -7,2
 
  
@@ -493,7 +516,11 @@ lcd.setCursor(3,1);
 lcd.print("%");
 delay(delayDisplay);
  
+<<<<<<< HEAD
  if((soilMoisture <= 30) && (tankfill1 >= 35)){//potisma
+=======
+ if((soilMoisture <= 30) && (tankfill1 >= 30)){//potisma
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
 
     lcd.clear();
     digitalWrite(Relay3,LOW);
@@ -510,7 +537,11 @@ delay(delayDisplay);
     lcd.setCursor(0,1);
     lcd.print("Watering Plant");
     stepperhome();
+<<<<<<< HEAD
   while((soilMoisture <= 50) && (tankfill1 >= 35)){
+=======
+  while((soilMoisture <= 50) && (tankfill1 >= 30)){
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
     hw103();
     hcsr1();
    steppermotor();    
@@ -540,9 +571,15 @@ if( analogRead(switch1) < 200) {
   delay(500);
   digitalWrite(Relay4 , LOW);
  
+<<<<<<< HEAD
 while(( analogRead(switch1) < 200)&&(tankfill1 <=80)&&(tankfill3>=35)) {
 hcsr1();
 hcsr3();
+=======
+while(( analogRead(switch1) < 200)&&(tankfill1 <=80)&&(tankfill3>=30)) {
+hcsr1;
+hcsr3;
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
 }
   digitalWrite(Relay1,HIGH);
      digitalWrite(led1,LOW);
@@ -559,16 +596,26 @@ if( analogRead(switch2) < 200) {
   delay(delayDisplay);
   digitalWrite(Relay2 , LOW);
   digitalWrite(led2 , HIGH); 
+<<<<<<< HEAD
 while(( analogRead(switch1) < 200)&&(tankfill2 <=80)&&(tankfill3>=35)) {
 hcsr2();
 hcsr3();
+=======
+while(( analogRead(switch1) < 200)&&(tankfill2 <=80)&&(tankfill3>=30)) {
+hcsr2;
+hcsr3;
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
 }
    digitalWrite(Relay2,HIGH);
    digitalWrite(led2,LOW);
 }
 
 
+<<<<<<< HEAD
 //potisma
+=======
+
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
 if( analogRead(switch3) < 200) {
    lcd.clear();
   lcd.setCursor(0,0);
@@ -582,7 +629,11 @@ if( analogRead(switch3) < 200) {
   digitalWrite(Relay5 , LOW);
   stepperhome();
 
+<<<<<<< HEAD
 while(( analogRead(switch3) < 200)&&(tankfill1>=35)) {
+=======
+while(( analogRead(switch3) < 200)&&(tankfill1>=30)) {
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
 
  hcsr1();
 steppermotor();
@@ -603,15 +654,27 @@ if( analogRead(switch4) < 200) {
   delay(delayDisplay);
 digitalWrite(Relay8 , LOW);
   digitalWrite(led4 , HIGH); 
+<<<<<<< HEAD
   delay(500);
     digitalWrite(Relay7 , LOW);
  while((analogRead(switch4) < 200) && (tankfill3 <= 80)){
   hcsr3();
+=======
+  digitalWrite(Relay6 , LOW);
+  delay(500);
+    digitalWrite(Relay7 , LOW);
+ while((analogRead(switch4) < 200) && (tankfill1 >= 80)){
+  hcsr1;
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
  }
 digitalWrite(Relay7 ,HIGH);
   digitalWrite(led4 ,LOW); 
   digitalWrite(Relay8 , HIGH);
+<<<<<<< HEAD
   
+=======
+  digitalWrite(Relay6 , HIGH);
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
 }
 //test stepper
 if( analogRead(switch5) < 200) {
@@ -629,9 +692,14 @@ while(analogRead(switch5) < 200){
 
 }
 
+<<<<<<< HEAD
 //fota spiti
 
 if(( analogRead(switch6) < 200)&&( c==0)) {
+=======
+
+if( analogRead(switch6) < 200) {
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Switch6 close");
@@ -640,9 +708,17 @@ if(( analogRead(switch6) < 200)&&( c==0)) {
   delay(delayDisplay);
   digitalWrite(Relay6 , LOW);
   digitalWrite(led6 , HIGH);
+<<<<<<< HEAD
 
 c =1;
 
+=======
+while(analogRead(switch6) < 200){
+
+}
+digitalWrite(Relay6 ,HIGH );
+  digitalWrite(led6 ,LOW );
+>>>>>>> abd7f9f6af716bd4b04a51e9204f07f852b5f789
 }
 
 if(( analogRead(switch6) > 200)&&( c==1)) {
@@ -651,6 +727,8 @@ digitalWrite(Relay6 , HIGH);
 
 c =0;
 }
+
+
 
 
  
