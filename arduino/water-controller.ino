@@ -1,6 +1,7 @@
 //step motor
 #include <Stepper.h>
 const int stepsPerRevolution = 200;
+const int axisStep = 1600;
 Stepper myStepper(stepsPerRevolution, 15, 16, 17, 18);
 int endstop = 14;
 //hw-103
@@ -15,7 +16,7 @@ int sensorValue = 0;
 unsigned long int avgValue; 
 float b;
 int buf[10],temp;
-int phValue;
+float phValue;
 
 //HC-SR04
 int x;
@@ -203,7 +204,7 @@ delay(delayDisplay);
  lcd.setCursor(0,1);
  lcd.print("                 ");
 
-//hcsr2
+//hcsr3
  lcd.setCursor(9,0);
  lcd.print("Hcsr-E");
  delay(delayDisplay);
@@ -326,11 +327,14 @@ else{
   lcd.setCursor(0,1);
   lcd.print("                 ");
 //STEP MOTOR
-  myStepper.setSpeed(60);
+    myStepper.setSpeed(60);
   pinMode(endstop,INPUT);
   lcd.setCursor(9,0);
  lcd.print("Step Motor");
- steppermotor();
+ stepperhome();
+ 
+ lcd.clear();
+ lcd.print("Process:");
  lcd.setCursor(9,0);
  lcd.print("               ");
 
@@ -391,8 +395,8 @@ void loop() {
    lcd.clear();
    ph(); // function ph phValue
    lcd.setCursor(0,1);
-   lcd.print("phValue:");
-   lcd.setCursor(8,1);
+   lcd.print("ph:");
+   lcd.setCursor(4  ,1);
    lcd.print(phValue);
    delay(delayDisplay);
    lcd.clear();
@@ -400,10 +404,8 @@ void loop() {
  
  if(phValue >= 6,9) {// check ph
   lcd.clear();
-  while((tankfill1 <= 70) && (tankfill3 >= 30)){
-  hcsr1;
-  hcsr3;
-  digitalWrite(Relay1 , LOW);
+  if((tankfill1 <= 70) && (tankfill3 >= 35)){
+    digitalWrite(Relay1 , LOW);
   digitalWrite(led1 , HIGH);
   delay(500);
   digitalWrite(Relay4 , LOW);
@@ -411,30 +413,38 @@ void loop() {
 
    lcd.setCursor(0,0);
    lcd.print("Filling Tank-C");
-   lcd.setCursor(0,1);
-   lcd.print("Tank-E:");
-   lcd.setCursor(7,1);
-   lcd.print("   ");  
-   lcd.setCursor(7,1);
-   lcd.print(tankfill3);
-   lcd.setCursor(10,1);
+  
+  
+  
+  while((tankfill1 <= 70) && (tankfill3 >= 35)){
+  hcsr1();
+  hcsr3();
+  lcd.clear();
+     lcd.setCursor(0,0);
+   lcd.print("Tank-C:");
+  lcd.print(tankfill1);
    lcd.print("%");
+ lcd.setCursor(0,1);
+   lcd.print("Tank-E:");
+  lcd.print(tankfill3);
+   lcd.print("%");
+   delay(delayDisplay);
  }
- 
-  digitalWrite(Relay1 , HIGH);
+   digitalWrite(Relay1 , HIGH);
   digitalWrite(led1 , LOW);
   delay(500);
-  digitalWrite(Relay4 , LOW);
+  digitalWrite(Relay4 , HIGH);
+  }//end fill tankc
 
-  delay(500);
- 
+
+
  }//end if ph +7,2
 
 
  
  if(phValue < 6,9) {// check ph
     lcd.clear();
-if((tankfill2 <= 70) && (tankfill3 >= 30)){
+if((tankfill2 <= 70) && (tankfill3 >= 35)){
  digitalWrite(Relay2,LOW);
  digitalWrite(led2,HIGH);
    
@@ -449,12 +459,8 @@ if((tankfill2 <= 70) && (tankfill3 >= 30)){
   lcd.setCursor(10,1);
   lcd.print("%");
   delay(delayDisplay);
-   }//end if
- else{
-  digitalWrite(Relay2,HIGH);
-  digitalWrite(led2,LOW);
-  delay(500);
- }
+   }//end fill tanko
+
  }//end if ph -7,2
 
  
@@ -469,7 +475,7 @@ else{//water level open
 
 
  if(digitalRead(Relay2) == LOW){
- if ((tankfill2 >= 70) || (tankfill3 >= 30)){
+ if ((tankfill2 >= 70) || (tankfill3 <= 35)){
    digitalWrite(Relay2,HIGH);
    digitalWrite(led2,LOW);
   }
@@ -487,11 +493,12 @@ lcd.setCursor(3,1);
 lcd.print("%");
 delay(delayDisplay);
  
- if((soilMoisture <= 30) && (tankfill1 >= 30)){//potisma
-  while((soilMoisture <= 50) || (tankfill1 >= 30)){
+ if((soilMoisture <= 30) && (tankfill1 >= 35)){//potisma
+
     lcd.clear();
     digitalWrite(Relay3,LOW);
     digitalWrite(led3,HIGH);
+    delay(500);
     digitalWrite(Relay5 , LOW);
     lcd.print("Tank-O:");
     lcd.setCursor(7,0);
@@ -502,33 +509,20 @@ delay(delayDisplay);
     lcd.print("%");
     lcd.setCursor(0,1);
     lcd.print("Watering Plant");
-   steppermotor();
-    
+    stepperhome();
+  while((soilMoisture <= 50) && (tankfill1 >= 35)){
+    hw103();
+    hcsr1();
+   steppermotor();    
 }
- }
- //klisimo potisma
+   //klisimo potisma
  digitalWrite(Relay3,HIGH);
     digitalWrite(led3,LOW);
-    digitalWrite(Relay5 ,HIGH);
-     myStepper.step(-stepsPerRevolution);
-  delay(50);
+    digitalWrite(Relay5 ,HIGH); 
+ }
+
+    
   
-  if (digitalRead(endstop) == HIGH){
-     myStepper.step(0);
-  }
-/*
-//klisimo potisma
-if (digitalRead(Relay3) == LOW){
-  if(c==0){   //sthn periptwsh poy o manual diakopths switch 3 einai klistos
-  if((soilMoisture >= 50) || (tankfill1 <= 30)){
-    digitalWrite(Relay3,HIGH);
-    digitalWrite(led3,LOW);
-    digitalWrite(Relay5 ,HIGH);
-     }
-}
-     
-}
-*/
 
 
 
@@ -541,34 +535,20 @@ if( analogRead(switch1) < 200) {
   lcd.setCursor(0,1);
   lcd.print("Fill Tank-C");
   delay(delayDisplay);
-  digitalWrite(Relay1 , LOW);
+  digitalWrite(Relay1 , LOW);// anoije hlektrobana, antlia
   digitalWrite(led1 , HIGH); 
   delay(500);
   digitalWrite(Relay4 , LOW);
  
-//klisimo fill clean
-//Serial.print("tankfill1=");
-//Serial.println(tankfill1);
-if (digitalRead(Relay1) == LOW){
-  if((tankfill1 >= 70) || (tankfill3 <= 30)){
-    
-    digitalWrite(Relay1,HIGH);
-    digitalWrite(led1,LOW);
-    delay(500);
-    digitalWrite(Relay4,HIGH);
-  }
+while(( analogRead(switch1) < 200)&&(tankfill1 <=80)&&(tankfill3>=35)) {
+hcsr1();
+hcsr3();
 }
-a =1;
-}
-else{
-  if(a ==1){
-     digitalWrite(Relay1,HIGH);
+  digitalWrite(Relay1,HIGH);
      digitalWrite(led1,LOW);
-     delay(500);
      digitalWrite(Relay4,HIGH);
-     a = 0;
-  }
 }
+// tank o fill
 
 if( analogRead(switch2) < 200) {
   lcd.clear();
@@ -579,121 +559,98 @@ if( analogRead(switch2) < 200) {
   delay(delayDisplay);
   digitalWrite(Relay2 , LOW);
   digitalWrite(led2 , HIGH); 
-
-if (digitalRead(Relay2) == LOW){
-  if((tankfill2 >= 70) || (tankfill3 <= 30)){
-    digitalWrite(Relay2,HIGH);
-    digitalWrite(led2,LOW);
-  }
+while(( analogRead(switch1) < 200)&&(tankfill2 <=80)&&(tankfill3>=35)) {
+hcsr2();
+hcsr3();
 }
-g =1;
-}
-else{
-  if(g==1){
    digitalWrite(Relay2,HIGH);
    digitalWrite(led2,LOW);
-  g = 0;
-  }
 }
 
-while( analogRead(switch3) < 200) {
-  lcd.clear();
+
+//potisma
+if( analogRead(switch3) < 200) {
+   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Switch3 close");
   lcd.setCursor(0,1);
   lcd.print("Water Plants");
-  
+  delay(delayDisplay);
   digitalWrite(Relay3, LOW);
   digitalWrite(led3 , HIGH); 
   delay(500);
   digitalWrite(Relay5 , LOW);
-steppermotor();
-if (digitalRead(Relay3) == LOW){
-  if((soilMoisture >= 60) || (tankfill1 <= 30)){
-    digitalWrite(Relay3,HIGH);
-    digitalWrite(led3,LOW);
-    delay(500);
-    digitalWrite(Relay5 ,HIGH);
-  }
-}
-c=1;
-}
-  
-  if(c==1){
-    myStepper.step(-stepsPerRevolution);
-  delay(50);
-  
-  if (digitalRead(endstop) == HIGH){
-     myStepper.step(0);
-  }
-     digitalWrite(Relay3,HIGH);
-     digitalWrite(led3,LOW);
-     delay(500);
-     digitalWrite(Relay5 , HIGH);
-  c = 0;
-  }
- 
+  stepperhome();
 
+while(( analogRead(switch3) < 200)&&(tankfill1>=35)) {
+
+ hcsr1();
+steppermotor();
+
+}
+digitalWrite(Relay3,HIGH);
+     digitalWrite(led3,LOW);
+     
+     digitalWrite(Relay5 , HIGH);
+}
+  
+ 
+//fill tank e 
 if( analogRead(switch4) < 200) {
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Switch4 close");
   delay(delayDisplay);
-  digitalWrite(Relay6 , LOW);
+digitalWrite(Relay8 , LOW);
   digitalWrite(led4 , HIGH); 
-  if (tankfill3 > 85){
-      digitalWrite(Relay6,HIGH);
-      digitalWrite(led4,LOW); 
-  }
-
-d =1;
+  delay(500);
+    digitalWrite(Relay7 , LOW);
+ while((analogRead(switch4) < 200) && (tankfill3 <= 80)){
+  hcsr3();
+ }
+digitalWrite(Relay7 ,HIGH);
+  digitalWrite(led4 ,LOW); 
+  digitalWrite(Relay8 , HIGH);
+  
 }
-else{
-  if(d ==1){
-     digitalWrite(Relay6,HIGH);
-     digitalWrite(led4,LOW);
-  d = 0;
-  }
-}
-
+//test stepper
 if( analogRead(switch5) < 200) {
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Switch5 close");
+  lcd.setCursor(0,1);
+  lcd.print("Stepper");
   delay(delayDisplay);
-  digitalWrite(Relay7 , LOW);
-  digitalWrite(led5 , HIGH); 
-
-e =1;
-}
-else{
-  if(e ==1){
-     digitalWrite(Relay7,HIGH);
-     digitalWrite(led5,LOW);
-  e = 0;
-  }
+  stepperhome();
+while(analogRead(switch5) < 200){
+  steppermotor();
 }
 
-if( analogRead(switch6) < 200) {
+
+}
+
+//fota spiti
+
+if(( analogRead(switch6) < 200)&&( c==0)) {
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Switch6 close");
+    lcd.setCursor(0,1);
+  lcd.print("House Lights");
   delay(delayDisplay);
-  digitalWrite(Relay8 , LOW);
-  digitalWrite(led6 , HIGH); 
+  digitalWrite(Relay6 , LOW);
+  digitalWrite(led6 , HIGH);
 
-f =1;
+c =1;
+
 }
 
-else{
-  if(f ==1){
-     digitalWrite(Relay8,HIGH);
-     digitalWrite(led6,LOW);
-  f = 0;
-  }
+if(( analogRead(switch6) > 200)&&( c==1)) {
+digitalWrite(Relay6 , HIGH);
+ digitalWrite(led6 , LOW);
+
+c =0;
 }
-
-
 
 
  
@@ -726,7 +683,7 @@ for(int i=0;i<10;i++)
  avgValue+=buf[i];
  }
  float pHVol=(float)avgValue*5.0/1024/6;
- float phValue = -5.70 * pHVol + 21.34;
+ phValue = -5.70 * pHVol + 21.34;
  Serial.print("ph = ");
  Serial.println(phValue);
  }
@@ -888,18 +845,4 @@ for(int i=0;i<10;i++)
  Serial.print(soilMoisture);
  Serial.println("%");
  }
- void steppermotor(){
-  // step one revolution in one direction:
-  Serial.println("clockwise");
-  myStepper.step(stepsPerRevolution);
-  delay(500);
-
-  // step one revolution in the other direction:
-  Serial.println("counterclockwise");
-  myStepper.step(-stepsPerRevolution);
-  delay(50);
-  
-  if (digitalRead(endstop) == HIGH){
-     myStepper.step(0);
-  }
- }
+ 
