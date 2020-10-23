@@ -27,3 +27,6 @@
 5x  Μαστοί                               12.50 ΕΥΡΩ
 1x teflor                                 0,30 ΕΥΡΩ
 Συνολική Αξία:                         191 ,86 ΕΥΡΩ
+
+Αναλυτική περιγραφή όλων των βημάτων υλοποίησης υπάρχουν στην ιστοσελίδα μας
+https://openedtech.ellak.gr/robotics2020/sillektis-elegktis-oxinis-vrochis/
