@@ -1,10 +1,14 @@
 //step motor
+const int enablePin = 36;
+const int m0pin = 38;
+const int m1pin = 40;
+const int m2pin =42;
 const int endstop = 14;
 const int dirPin = 15;
 const int stepPin = 16;
 const int stepsPerRevolution = 200;
 const int axisStep = 1300;
-int stepdelay = 400;
+int stepdelay = 500;
 //hw-103
 const int analogHw = A8; 
 int soilMoisture;
@@ -88,13 +92,10 @@ const int pin_BL = 10;
 LiquidCrystal lcd( pin_RS,  pin_EN,  pin_d4,  pin_d5,  pin_d6,  pin_d7);
 const int lcd_buttons = A0;
 int l;
-int delayDisplay = 1000;
+int delayDisplay = 500;
 unsigned long time1;
 void setup() {
-       pinMode(stepPin, OUTPUT);
-  pinMode(dirPin, OUTPUT);
-  pinMode(endstop,INPUT);
-  digitalWrite(stepPin,HIGH);
+     
   // put your setup code here, to run once:
  Serial.begin(9600);
  //lcd
@@ -108,7 +109,14 @@ void setup() {
  lcd.setCursor(0,1);
  lcd.print("                 ");
  //STEP MOTOR
-
+  pinMode(enablePin,OUTPUT);
+  pinMode(m0pin,OUTPUT);
+  pinMode(m1pin,OUTPUT);
+  pinMode(m2pin,OUTPUT);
+  pinMode(stepPin, OUTPUT);
+  pinMode(dirPin, OUTPUT);
+  pinMode(endstop,INPUT);
+  digitalWrite(enablePin,HIGH);
    
   lcd.setCursor(9,0);
  lcd.print("Step Motor");
@@ -435,6 +443,7 @@ hw103(); //function plant soilmoisture
     hcsr1();
    steppermotor();    
 }
+ digitalWrite(enablePin,HIGH);
    //klisimo potisma
    //lcd.noDisplay()();
  digitalWrite(Relay3,HIGH);
@@ -526,6 +535,7 @@ while(( analogRead(switch3) < 200)&&(tankfill1>=35)) {
 steppermotor();
 hcsr1();
 }
+ digitalWrite(enablePin,HIGH);
   //lcd.noDisplay()();
 digitalWrite(Relay3,HIGH);
      digitalWrite(led3,LOW);
@@ -569,7 +579,7 @@ while(analogRead(switch5) < 200){
   steppermotor();
 }
   //lcd.noDisplay()();
-
+ digitalWrite(enablePin,HIGH);
 }
 
 
